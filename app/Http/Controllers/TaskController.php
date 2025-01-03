@@ -7,65 +7,50 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    // Método para mostrar todas las tareas
-    public function index()    
+    public function index()
     {
-        $tasks = Task::all(); // Obtener todas las tareas
-        return view('task.index', compact('tasks')); // Pasar las tareas a la vista
+        $tasks = Task::all();
+        return view('task.index', compact('tasks'));
     }
 
-    // Método para almacenar una nueva tarea
     public function store(Request $request)
-    {   
+    {
         $request->validate([
-            'task' => 'required|string|max:255', // Validar que el campo 'task' es requerido y es una cadena de texto
+            'task' => 'required|string|max:255',
         ]);
 
         Task::create([
-            'task' => $request->input('task'), // Crear una nueva tarea con el valor del campo 'task'
+            'task' => $request->input('task'),
         ]);
 
-        return redirect()->route('tasks.index'); // Redirigir a la lista de tareas
+        return redirect()->route('tasks.index');
     }
 
-    // Método para eliminar una tarea
+    public function edit($id)
+    {
+        $task = Task::findOrFail($id);
+        return view('task.edit', compact('task'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'task' => 'required|string|max:255',
+        ]);
+
+        $task = Task::findOrFail($id);
+        $task->update([
+            'task' => $request->input('task'),
+        ]);
+
+        return redirect()->route('tasks.index');
+    }
+
     public function destroy($id)
     {
-        $task = Task::findOrFail($id); // Buscar la tarea por ID, lanzar un error si no se encuentra
-        $task->delete(); // Eliminar la tarea
+        $task = Task::findOrFail($id);
+        $task->delete();
 
-        return redirect()->route('tasks.index'); // Redirigir a la lista de tareas
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Task $task)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Task $task)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Task $task)
-    {
-        //
+        return redirect()->route('tasks.index');
     }
 }
