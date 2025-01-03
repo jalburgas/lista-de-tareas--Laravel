@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Aplicacion todolist</title>
+    <title>Aplicacion todolist Laravel</title>
 </head>
 <body>
     <!-- Formulario para agregar una nueva tarea -->
